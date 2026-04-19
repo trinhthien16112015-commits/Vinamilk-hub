@@ -1,0 +1,351 @@
+--// LOAD UI
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "💎 Scripts tổng hợp premium | VINAMILK TEAM",
+    LoadingTitle = "Đang tải hệ thống...",
+    LoadingSubtitle = "by VINAMILK TEAM",
+    ConfigurationSaving = { Enabled = false }
+})
+
+--// SERVICES
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+--// VARIABLES
+local Aimbot = false
+local AimPart = "Head"
+local AimMode = "Nearest"
+local AimSmooth = 0.2
+
+local TriggerBot = false
+local TriggerDelay = 0.1
+local LastShot = 0
+
+local Hitbox = false
+local HitboxSize = 5
+
+local Speed = false
+local WalkSpeedValue = 25
+local Noclip = false
+
+--// TAB THÔNG BÁO
+local InfoTab = Window:CreateTab("📢 Thông báo", 4483362458)
+
+InfoTab:CreateParagraph({
+    Title = "📢 Thông báo",
+    Content = "Cảm ơn các bạn đã sài scripts của team Vinamilk, giờ script của bọn mình còn khá nhiều lỗi các bạn sài script thông cảm nhé.\n\nCó gì thì mọi người báo cáo về nick tiktok của mình nhé\nId tiktok: khng.ht.thuc.cha6\n\nChúc các bạn sài scripts vui vẻ nhé, chúng mình xin cảm ơn!!!"
+})
+
+--// MAIN TABS
+function CreateMainTabs()
+
+    -- COMBAT
+    local CombatTab = Window:CreateTab("⚔️ Combat", 4483362458)
+
+    CombatTab:CreateToggle({Name="Aimbot", Callback=function(v) Aimbot=v end})
+    CombatTab:CreateToggle({Name="TriggerBot", Callback=function(v) TriggerBot=v end})
+    CombatTab:CreateToggle({Name="Hitbox", Callback=function(v) Hitbox=v end})
+
+    CombatTab:CreateDropdown({
+        Name="Aim Mode",
+        Options={"Nearest","LowestHP"},
+        CurrentOption="Nearest",
+        Callback=function(v) AimMode=v end
+    })
+
+    CombatTab:CreateSlider({
+        Name="Aim Smooth",
+        Range={0.05,1},
+        Increment={0.05},
+        CurrentValue=0.2,
+        Callback=function(v) AimSmooth=v end
+    })
+
+    CombatTab:CreateSlider({
+        Name="Trigger Delay",
+        Range={0.05,0.5},
+        Increment={0.05},
+        CurrentValue=0.1,
+        Callback=function(v) TriggerDelay=v end
+    })
+
+    CombatTab:CreateSlider({
+        Name="Hitbox Size",
+        Range={3,10},
+        Increment={1},
+        CurrentValue=5,
+        Callback=function(v) HitboxSize=v end
+    })
+
+    -- SETTING
+    local SettingTab = Window:CreateTab("⚙️ Setting", 4483362458)
+
+    SettingTab:CreateToggle({Name="Speed", Callback=function(v) Speed=v end})
+    SettingTab:CreateToggle({Name="Noclip", Callback=function(v) Noclip=v end})
+
+    SettingTab:CreateButton({
+        Name="👑 Infinite Yield",
+        Callback=function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+        end
+    })
+
+    SettingTab:CreateButton({
+        Name="🕊️ Fly GUI V3",
+        Callback=function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+        end
+    })
+
+    -- GRAPHICS
+    local GraphicsTab = Window:CreateTab("🌄 Đồ họa", 4483362458)
+
+    GraphicsTab:CreateToggle({
+        Name="🌞 Fullbright",
+        Callback=function(v)
+            if v then
+                Lighting.Brightness=2
+                Lighting.ClockTime=14
+                Lighting.FogEnd=100000
+                Lighting.GlobalShadows=false
+            else
+                Lighting.Brightness=1
+                Lighting.GlobalShadows=true
+            end
+        end
+    })
+
+    GraphicsTab:CreateToggle({
+        Name="🚀 Anti Lag",
+        Callback=function(v)
+            if v then
+                for _,obj in pairs(workspace:GetDescendants()) do
+                    if obj:IsA("BasePart") then
+                        obj.Material=Enum.Material.Plastic
+                        obj.Reflectance=0
+                    end
+                end
+            end
+        end
+    })
+
+    GraphicsTab:CreateToggle({
+        Name="🌫️ No Fog",
+        Callback=function(v)
+            if v then Lighting.FogEnd=100000 else Lighting.FogEnd=1000 end
+        end
+    })
+
+    GraphicsTab:CreateButton({Name="🌅 Bình minh", Callback=function() Lighting.ClockTime=6 end})
+    GraphicsTab:CreateButton({Name="☀️ Ban ngày", Callback=function() Lighting.ClockTime=14 end})
+    GraphicsTab:CreateButton({Name="🌇 Hoàng hôn", Callback=function() Lighting.ClockTime=18 end})
+    GraphicsTab:CreateButton({Name="🌙 Ban đêm", Callback=function() Lighting.ClockTime=0 end})
+
+    --// SCRIPTS CHÍNH (GỘP TẤT CẢ)
+    local MainTab = Window:CreateTab("📜 SCRIPTS ĐÃ ĐƯỢC TỔNG HỢP", 4483362458)
+
+    -- các scripts khác
+    MainTab:CreateParagraph({
+        Title = "script trộn",
+        Content = "Script riêng"
+    })
+
+    MainTab:CreateButton({
+        Name="🚂 Ring ta dành cho dead rails",
+        Callback=function()
+            loadstring(game:HttpGet("https://rawscripts.net/raw/Dead-Rails-Beta-KEYLESS-BEST-SCRIPT-RINGTA-HUB-TP-STERLING-BRING-ALL-ITEMS-78756"))()
+        end
+    })
+
+    MainTab:CreateButton({
+        Name="meme sea redz",
+        Callback=function() loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/MemeSea/refs/heads/main/Source.lua"))() end
+    })
+
+    MainTab:CreateButton({
+        Name= "Ice Hub Brookhaven",
+         Callback=function()
+            loadstring(game:HttpGet("https://scriptblox.com/raw/Universal-Script-Ice-Hub-6414"))()
+        end
+       })
+    MainTab:CreateButton({
+        Name="Coquette brookhaven",
+        Callback=function()
+            loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-Coquette-Hub-Updated-2025-75310"))()
+         end
+        })
+
+    -- Scripts cho blox fruit 
+    MainTab:CreateParagraph({
+        Title = "BLOX FRUIT",
+        Content = "Scripts tổng hợp"
+    })
+
+    MainTab:CreateButton({
+        Name="Real redz",
+        Callback=function()
+            local Settings = { JoinTeam = "Pirates", Translator = true }
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Scripts/refs/heads/main/main.luau"))(Settings)
+        end
+    })
+
+    MainTab:CreateButton({
+        Name="kaitun auto fram",
+        Callback=function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/meobeo8/a/a/a"))()
+        end
+    })
+
+    MainTab:CreateButton({
+        Name="Quantum hud",
+        Callback=function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Blox-Fruits-Opps/QuantumOnyx-Script/refs/heads/main/Txt", true))()
+        end
+    })
+
+    MainTab:CreateButton({
+        Name="❄️ Freeze Trade",
+        Callback=function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/MeowOnTopHub/MeowHub/refs/heads/main/loader.luau"))()
+        end
+    })
+
+    MainTab:CreateButton({
+        Name="🍇 Dupe Fruit",
+        Callback=function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/MeowOnTopHub/FruitDuper/refs/heads/main/NewUpdate"))()
+        end
+    })
+
+    MainTab:CreateButton({
+        Name="🥚 Infinity Egg",
+        Callback=function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/MeowOnTopHub/InfinityEgg/refs/heads/main/Loader.lua"))()
+        end
+    })
+
+    MainTab:CreateButton({
+        Name="🐉 Dragon Spawner",
+        Callback=function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/MeowOnTopHub/Dragon/refs/heads/main/Spawmner"))()
+        end
+    })
+
+end
+
+-- AUTO LOAD
+CreateMainTabs()
+
+--// AIMBOT LÒGIC (Đã sửa lỗi Lerp)
+RunService.RenderStepped:Connect(function()
+    if not Aimbot then return end
+
+    local closest = nil
+    local shortest = math.huge
+    local lowestHP = math.huge
+
+    for _,p in pairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") then
+            local hum = p.Character.Humanoid
+            if hum.Health > 0 then
+                local hrp = p.Character.HumanoidRootPart
+                local dist = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) and (LocalPlayer.Character.HumanoidRootPart.Position - hrp.Position).Magnitude or math.huge
+
+                if AimMode == "LowestHP" then
+                    if hum.Health < lowestHP then
+                        lowestHP = hum.Health
+                        closest = p
+                    end
+                else
+                    if dist < shortest then
+                        shortest = dist
+                        closest = p
+                    end
+                end
+            end
+        end
+    end
+
+    if closest and closest.Character and closest.Character:FindFirstChild(AimPart) then
+        local targetPos = closest.Character[AimPart].Position
+        Camera.CFrame = Camera.CFrame:Lerp(CFrame.new(Camera.CFrame.Position, targetPos), AimSmooth)
+    end
+end)
+
+--// TRIGGERBOT (Sử dụng RaycastParams mới)
+RunService.RenderStepped:Connect(function()
+    if not TriggerBot then return end
+
+    local params = RaycastParams.new()
+    params.FilterType = Enum.RaycastFilterType.Exclude
+    params.FilterDescendantsInstances = {LocalPlayer.Character}
+
+    local result = workspace:Raycast(Camera.CFrame.Position, Camera.CFrame.LookVector * 500, params)
+
+    if result and result.Instance and result.Instance.Parent:FindFirstChild("Humanoid") then
+        local hum = result.Instance.Parent.Humanoid
+        if hum.Health > 0 and (tick() - LastShot >= TriggerDelay) then
+            mouse1press()
+            task.wait()
+            mouse1release()
+            LastShot = tick()
+        end
+    end
+end)
+
+--// HITBOX (Sửa lỗi hoàn trả size)
+RunService.Heartbeat:Connect(function()
+    for _,v in pairs(Players:GetPlayers()) do
+        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+            local part = v.Character.HumanoidRootPart
+            if Hitbox then
+                part.Size = Vector3.new(HitboxSize, HitboxSize, HitboxSize)
+                part.Transparency = 0.5
+                part.CanCollide = false
+            else
+                part.Size = Vector3.new(2, 2, 1)
+                part.Transparency = 1
+                part.CanCollide = true
+            end
+        end
+    end
+end)
+
+--// SPEED
+RunService.RenderStepped:Connect(function()
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+        LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = Speed and WalkSpeedValue or 16
+    end
+end)
+
+--// NOCLIP
+RunService.Stepped:Connect(function()
+    if not Noclip then return end
+    if LocalPlayer.Character then
+        for _,p in pairs(LocalPlayer.Character:GetDescendants()) do
+            if p:IsA("BasePart") then p.CanCollide = false end
+        end
+    end
+end)
+
+--// TOGGLE UI
+UIS.InputBegan:Connect(function(i, gameProcessed)
+    if gameProcessed then return end 
+    if i.KeyCode == Enum.KeyCode.RightShift then
+        Rayfield:Toggle()
+    end
+end)
+
+
+
+
+
+
+
+
+
